@@ -1,47 +1,38 @@
 import { useState } from 'react';
-import { ChevronLeft, House, Settings } from 'lucide-react';
+import {House, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 
 const Sidebar = () => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const Menus = [
-        { title: "Home", src: House },
-        { title: "Settings", src: Settings },
+        { title: "Dashboard", icon: House, src:'/' },
+        { title: "Topup List", icon: Settings, src: '/topuplist' },
     ];
+    const nav = useNavigate()
     return (
-        <div className="flex">
+        <div className="flex" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
             <div
-                className={` ${open ? "w-72" : "w-20 "
-                    } bg-[#00000090] h-screen p-5 pt-8 relative duration-300`}
+                className={` ${open ? "w-52" : "w-20 "
+                    } bg-[#fff] h-screen p-5 pt-8 relative duration-300 shadow-lg `}
             >
-                <ChevronLeft color='#38BDF8'
-                    className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple
- border-2 rounded-full ${!open && "rotate-180"} bg-[#fff]`}
-                    onClick={() => setOpen(!open)}
-                />
                 <div className="flex gap-x-4 items-center">
-                    {/* <img
-                        src="/assets/smiley.svg"
-                        className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"
-                            }`}
-                    /> */}
-                    <h1
-                        className={`text-white origin-left font-medium text-xl duration-200 ${!open && "scale-0"
-                            }`}
-                    >
-                        Shadow Games
-                    </h1>
+                    <img
+                        src="logo.jpeg"
+                        style={{ borderRadius: '50%', width: '80px' }}
+                    />
                 </div>
                 <ul className="pt-6">
                     {Menus.map((Menu, index) => (
                         <li
                             key={index}
-                            className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 
- ${index === 0 && "bg-light-white"
+                            className={`flex rounded-md p-2 cursor-pointer 
+                            hover:bg-light-white text-black text-sm items-center gap-x-4 
+                                    ${index === 0 && "bg-light-white"
                                 } `}
                         >
-                            <Menu.src />
-                            <span className={`${!open && "hidden"} origin-left duration-200`}>
+                            <Menu.icon />
+                            <span className={`${!open && "hidden"} origin-left duration-200`} onClick={()=>nav(`${Menu.src}`)}>
                                 {Menu.title}
                             </span>
                         </li>
