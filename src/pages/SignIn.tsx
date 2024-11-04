@@ -11,7 +11,7 @@ export default function SignIn() {
     e.preventDefault()
     if(!email || !pwd) return 
     try {
-      const {data} = await axios.post('http://localhost:8000/api/user/login', {
+      const {data} = await axios.post('https://coinstore-backend.onrender.com/api/user/login', {
         email,
         password: pwd,
         role: "ADMIN"
