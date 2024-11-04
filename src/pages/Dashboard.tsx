@@ -9,8 +9,14 @@ export default function Dashboard() {
 
   async function getData() {
     try {
-      const res = await axios.get('https://coinstore-backend.onrender.com/api/admin/transaction/getall')
-      console.log(res)
+      const token = localStorage.getItem("token");
+      
+      const res = await axios.get('http://localhost:8000/api/admin/transaction/getall', {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      console.log(res.data)
 
     } catch (err) {
       console.log(err)
@@ -23,7 +29,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="p-4">
+    <div className="p-4 min-h-screen">
       <TopCard/>
       <Chart1/>
     </div>
