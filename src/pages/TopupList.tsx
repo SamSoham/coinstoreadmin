@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 
 export default function TopupList() {
 
@@ -51,17 +52,30 @@ const TopupDisplay = ({ name, data, img }: { name: string, data: any, img: strin
 
     const [open, setOpen] = useState(false)
     const [quantity,setQuantity] = useState('')
-    const [price,setPrice] = useState('')
+    const [desc,setDesc] = useState('')
+    const [comm,setComm] = useState('')
+    const [game,setGame] = useState('')
+    const [code,setCode] = useState('')
+    const [provider,setProvider] = useState('')
+    const [topup,setTopup] = useState('')
+    const [active,setActive] = useState(false)
 
     function editInfo(inf:any){
         setOpen(true)
-        setPrice(inf['amount'])
+        setDesc(inf['amount'])
         setQuantity(inf['description'])
+        setCode(inf['gameCode'])
+        setComm(inf['commission'])
+        setGame(inf['game'])
+        setTopup(inf['topupCode'])
+        setProvider(inf['provider'])
+        setActive(inf['isActive'])
+        console.log(inf)
     }
 
     function reset(){
         setOpen(false)
-        setPrice('')
+        setDesc('')
         setQuantity('')
     }
 
@@ -88,19 +102,53 @@ const TopupDisplay = ({ name, data, img }: { name: string, data: any, img: strin
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="username" className="text-right">
+                                Amount
+                            </Label>
+                            <Input id="username" value={desc} onChange={(e)=>setDesc(e.target.value)} className="col-span-3" placeholder="2000"  />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="username" className="text-right">
+                                Commission
+                            </Label>
+                            <Input id="username" value={comm} onChange={(e)=>setComm(e.target.value)} className="col-span-3" placeholder="2000"  />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
-                                Quantity
+                                Description
                             </Label>
                             <Input id="name" value={quantity} onChange={(e)=>setQuantity(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
-                                Price
+                            <Label htmlFor="name" className="text-right">
+                                Game
                             </Label>
-                            <Input id="username" value={price} onChange={(e)=>setPrice(e.target.value)} className="col-span-3" placeholder="2000"  />
+                            <Input id="name" value={game} onChange={(e)=>setGame(e.target.value)} className="col-span-3" placeholder="12" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                                Game Code
+                            </Label>
+                            <Input id="name" value={code} onChange={(e)=>setCode(e.target.value)} className="col-span-3" placeholder="12" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                                Provider
+                            </Label>
+                            <Input id="name" value={provider} onChange={(e)=>setProvider(e.target.value)} className="col-span-3" placeholder="12" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                               Topup Code
+                            </Label>
+                            <Input id="name" value={topup} onChange={(e)=>setTopup(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                     </div>
                     <DialogFooter>
+                    <div className="flex items-center space-x-2">
+                            <Switch id="airplane-mode" checked={active} onCheckedChange={()=>setActive(!active)} />
+                            <Label htmlFor="airplane-mode">Active</Label>
+                    </div>
                         <Button type="submit">Save changes</Button>
                     </DialogFooter>
                 </DialogContent>
