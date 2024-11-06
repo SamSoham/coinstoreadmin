@@ -77,8 +77,8 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
 
     function editInfo(inf: any) {
         setOpen(true)
-        setDesc(inf['amount'])
-        setQuantity(inf['description'])
+        setDesc(inf['description'])
+        setQuantity(inf['amount'])
         setCode(inf['gameCode'])
         setComm(inf['commission'])
         setGame(inf['game'])
@@ -92,7 +92,6 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
     function reset() {
         setOpen(false)
         setDesc('')
-        setQuantity('')
         setQuantity('')
         setCode('')
         setComm('')
@@ -145,7 +144,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                         <div key={index} className="flex flex-row gap-2 border border-black rounded bg-slate-200 w-[250px] cursor-pointer hover:bg-slate-100 transition-colors p-2" onClick={() => editInfo(inf)}>
                             <img src={img} height={'50px'} width={'50px'} />
                             <div className="flex flex-col">
-                                <p>{Number.isNaN(parseInt(inf['description'])) ? inf['description'] : `${inf['description']} Diamonds`}</p>
+                                <p>{inf['description']}</p>
                                 <p>₹ {inf['amount']}</p>
                             </div>
                         </div>
@@ -162,7 +161,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                             <Label htmlFor="username" className="text-right">
                                 Amount
                             </Label>
-                            <Input id="username" value={desc} onChange={(e) => setDesc(e.target.value)} className="col-span-3" placeholder="2000" />
+                            <Input id="username" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="col-span-3" placeholder="2000" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="username" className="text-right">
@@ -174,31 +173,31 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                             <Label htmlFor="name" className="text-right">
                                 Description
                             </Label>
-                            <Input id="name" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input id="name" value={desc} onChange={(e) => setDesc(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Game
                             </Label>
-                            <Input id="name" value={game} onChange={(e) => setGame(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input disabled id="name" value={game} onChange={(e) => setGame(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Game Code
                             </Label>
-                            <Input id="name" value={code} onChange={(e) => setCode(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input disabled id="name" value={code} onChange={(e) => setCode(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Provider
                             </Label>
-                            <Input id="name" value={provider} onChange={(e) => setProvider(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input disabled id="name" value={provider} onChange={(e) => setProvider(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Topup Code
                             </Label>
-                            <Input id="name" value={topup} onChange={(e) => setTopup(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input disabled id="name" value={topup} onChange={(e) => setTopup(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                     </div>
                     <DialogFooter>
