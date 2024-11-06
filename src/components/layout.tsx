@@ -1,7 +1,7 @@
 import MobileMenu from "./mobileMenu";
 import Sidebar from "./siderbar";
 import { Outlet } from "react-router-dom";
-
+import { Toaster } from "@/components/ui/toaster"
 
 export default function Layout(){
     return(
@@ -9,6 +9,7 @@ export default function Layout(){
             <MobileMenu/>
             <Sidebar/>
             <Outlet/>
+            <Toaster />
         </div>
     )
 }
