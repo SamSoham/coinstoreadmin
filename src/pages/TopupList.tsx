@@ -141,7 +141,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2  max-h-[50vh] overflow-auto no-scrollbar">
                 {
                     data.map((inf: any, index: number) => (
-                        <div key={index} className="flex flex-row gap-2 border border-black rounded bg-slate-200 w-[250px] cursor-pointer hover:bg-slate-100 transition-colors p-2" onClick={() => editInfo(inf)}>
+                        <div key={index} className={`flex flex-row gap-2 border border-black rounded ${inf.isActive ? "bg-slate-200 w-[250px] hover:bg-slate-100" : "bg-red-200 w-[250px] hover:bg-red-100"} transition-colors p-2 cursor-pointer`} onClick={() => editInfo(inf)}>
                             <img src={img} height={'50px'} width={'50px'} />
                             <div className="flex flex-col">
                                 <p>{inf['description']}</p>
