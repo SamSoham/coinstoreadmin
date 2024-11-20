@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -6,6 +7,7 @@ export default function SignIn() {
   const [email, setEmail] = useState("")
   const [pwd, setPwd] = useState("")
   const navigate = useNavigate()
+  const {toast} = useToast()
 
   const handleSubmit = async(e: any)=>{
     e.preventDefault()
@@ -22,11 +24,17 @@ export default function SignIn() {
         navigate('/')
       } else{
         console.log(data);
+        toast({
+          description:data.message
+        })
       }
-    } catch (error) {
+    } catch (error:any) {
       localStorage.removeItem("token")
       localStorage.removeItem("user")
       console.log(error);
+      toast({
+        description:error.message
+      })
     }
   }
   return (
@@ -67,8 +75,7 @@ export default function SignIn() {
               </h1>
 
               <p className="mt-4 leading-relaxed text-gray-500">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam dolorum aliquam,
-                quibusdam aperiam voluptatum.
+              Welcome back, Game Master! Enter your domain, manage the realms, and bring your vision to life as you lead players through epic adventures
               </p>
 
               <form action="#" className="mt-8 grid grid-cols-6 gap-6">
