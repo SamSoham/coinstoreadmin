@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { House, Settings } from 'lucide-react';
+import { House, Settings, Wallet } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -8,6 +8,7 @@ const Sidebar = () => {
     const Menus = [
         { title: "Dashboard", icon: House, src: '/' },
         { title: "Topup List", icon: Settings, src: '/topuplist' },
+        { title: "Wallet Action", icon: Wallet, src: '/wallet-action' },
     ];
     const nav = useNavigate()
     return (

@@ -6,12 +6,13 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { House, List, Settings } from 'lucide-react';
+import { House, List, Settings, Wallet } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
 const Menus = [
     { title: "Dashboard", icon: House, src: '/' },
     { title: "Topup List", icon: Settings, src: '/topuplist' },
+    { title: "Wallet Action", icon: Wallet, src: '/wallet-action' },
 ];
 
 
