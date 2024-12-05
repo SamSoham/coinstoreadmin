@@ -1,16 +1,45 @@
-// import Chart1 from "@/components/Chart1"
-import TopCard from "@/components/TopCard"
+import { useToast } from "@/hooks/use-toast"
+import axios from "axios"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { useEffect, useState } from 'react'
 
-export default function Dashboard() {
+export default function Purchase(){
 
-
-
-
-  return (
-    <div className="p-4 min-h-screen">
-      <TopCard />
-      {/* <Chart1/> */}
-      {/* <div className="w-[90vw] h-[60vh] overflow-auto">
+    const [data, setData] = useState([])
+    const { toast } = useToast()
+  
+    async function getData() {
+      try {
+        const token = localStorage.getItem("token");
+  
+        const res = await axios.get('https://coinstore-backend.onrender.com/api/admin/transaction/getall', {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        })
+        setData(res.data.transactions)
+      } catch (err: any) {
+        toast({
+          description: err.message
+        })
+        console.log(err)
+      }
+    }
+  
+    useEffect(() => {
+      getData()
+    }, [])
+    
+    return(
+        <div className="p-4 min-h-screen">
+<div className="w-[90vw] h-[60vh] overflow-auto">
         <Table className="w-full border border-gray-200 rounded-lg shadow ">
           <TableHeader className="bg-slate-400">
             <TableRow>
@@ -28,7 +57,7 @@ export default function Dashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((invoice: any, index: any) => (
+            {data?.filter((invoice: any)=>invoice['paymentStatus']=='success').map((invoice: any, index: any) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="font-medium">{invoice['customerName']}</TableCell>
@@ -45,7 +74,8 @@ export default function Dashboard() {
             ))}
           </TableBody>
         </Table>
-      </div> */}
-    </div>
-  )
+      </div>
+        </div>
+        
+    )
 }
