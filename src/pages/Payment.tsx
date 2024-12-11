@@ -12,17 +12,15 @@ import { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
-  } from "@/components/ui/dialog"
-  import { Input } from "@/components/ui/input"
-  import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog"
 
 export default function Payment() {
 
     const [data, setData] = useState([])
-    const [open,setOpen] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [logs, setLogs] = useState()
     const { toast } = useToast()
 
     async function getData() {
@@ -35,6 +33,8 @@ export default function Payment() {
                 }
             })
             setData(res.data.transactions)
+            // console.log(res.data.transactions);
+            
         } catch (err: any) {
             toast({
                 description: err.message
@@ -43,35 +43,38 @@ export default function Payment() {
         }
     }
 
+    const handleOpen = (index: number)=>{
+        setOpen(true)
+        setLogs(data[index]['logs'])
+        console.log(data[index]['logs']);
+        
+    }
+
     useEffect(() => {
         getData()
     }, [])
 
     return (
         <div className="p-4 min-h-screen">
-            <Dialog open={open} onOpenChange={()=>setOpen(false)}>
-            <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
-          </div>
-        </div>
-      </DialogContent>
+            <Dialog open={open} onOpenChange={() => setOpen(false)}>
+                <DialogContent className="min-w-fit">
+                    <DialogHeader>
+                        <DialogTitle>Logs</DialogTitle>
+                        {/* <DialogDescription>
+                        </DialogDescription> */}
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        Payment Log
+                        <pre className="bg-slate-400 p-2">
+                            {logs && JSON.stringify(JSON.parse(logs!['paymentLog']), null, 2)}
+                        </pre>
+                        Provider Log
+                        <pre className="bg-slate-400 p-2">
+                            {logs && JSON.stringify(JSON.parse(logs!['providerLog']), null, 2)}
+                        </pre>
+                        
+                    </div>
+                </DialogContent>
             </Dialog>
             <div className="w-[90vw] h-[60vh] overflow-auto">
                 <Table className="w-full border border-gray-200 rounded-lg shadow ">
@@ -105,7 +108,7 @@ export default function Payment() {
                                 <TableCell>{invoice['userid']}</TableCell>
                                 <TableCell>{invoice['paymentStatus']}</TableCell>
                                 <TableCell className="text-right">{invoice['amount']}</TableCell>
-                                <TableCell className="underline cursor-pointer" onClick={()=>setOpen(true)}>View</TableCell>
+                                {invoice['logs'] && <TableCell className="underline cursor-pointer" onClick={() => handleOpen(index)}>View</TableCell>}
                             </TableRow>
                         ))}
                     </TableBody>
