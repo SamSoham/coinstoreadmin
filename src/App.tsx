@@ -9,6 +9,7 @@ import TopupList from './pages/TopupList';
 import WalletAction from './pages/WalletAction';
 import Purchase from './pages/Purchase';
 import Payment from './pages/Payment';
+import Announcement from './pages/Announcement';
 
 const ProtectedRoute = ({children} : {children: any})=>{
   const token = localStorage.getItem('token')
@@ -37,6 +38,7 @@ function App() {
             <Route path='/wallet-action' element={<ProtectedRoute><WalletAction /></ProtectedRoute>} />
             <Route path='/purchase' element={<ProtectedRoute><Purchase/></ProtectedRoute>}/>
             <Route path='/payment' element={<ProtectedRoute><Payment/></ProtectedRoute>}/>
+            <Route path='/announcement' element={<ProtectedRoute><Announcement/></ProtectedRoute>}/>
           </Route>
           <Route path='/signup' element={<AuthProtectedRoute><SignUp /></AuthProtectedRoute>} />
           <Route path='/login' element={<AuthProtectedRoute><SignIn /></AuthProtectedRoute>} />

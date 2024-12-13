@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { Banknote, CreditCard, House, List, Settings, Wallet } from 'lucide-react';
+import { Banknote, CreditCard, House, List, Settings, Wallet, MicVocal } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
 const Menus = [
@@ -14,7 +14,8 @@ const Menus = [
     { title: "Topup List", icon: Settings, src: '/topuplist' },
     { title: "Wallet Action", icon: Wallet, src: '/wallet-action' },
     { title: "Payment", icon: Banknote, src: '/payment'},
-    { title: "Purchase", icon: CreditCard, src: '/payment'}
+    { title: "Purchase", icon: CreditCard, src: '/payment'},
+    { title: "Announcement", icon: MicVocal, src: '/announcement'}
 ];
 
 

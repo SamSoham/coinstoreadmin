@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Banknote, CreditCard, House, Settings, Wallet } from 'lucide-react';
+import { Banknote, CreditCard, House, Settings, Wallet, MicVocal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -10,7 +10,8 @@ const Sidebar = () => {
         { title: "Topup List", icon: Settings, src: '/topuplist' },
         { title: "Wallet Action", icon: Wallet, src: '/wallet-action' },
         { title: "Payment", icon: Banknote, src: '/payment'},
-        { title: "Purchase", icon: CreditCard, src: '/purchase'}
+        { title: "Purchase", icon: CreditCard, src: '/purchase'},
+        { title: "Announcement", icon: MicVocal, src: '/announcement'}
     ];
     const nav = useNavigate()
     return (
