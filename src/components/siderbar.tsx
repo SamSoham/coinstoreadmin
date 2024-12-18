@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Banknote, CreditCard, House, Settings, Wallet, MicVocal } from 'lucide-react';
+import { Banknote, CreditCard, House, Settings, Wallet, MicVocal, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from './ui/button';
 
 
 const Sidebar = () => {
@@ -11,9 +12,15 @@ const Sidebar = () => {
         { title: "Wallet Action", icon: Wallet, src: '/wallet-action' },
         { title: "Payment", icon: Banknote, src: '/payment'},
         { title: "Purchase", icon: CreditCard, src: '/purchase'},
-        { title: "Announcement", icon: MicVocal, src: '/announcement'}
+        { title: "Announcement", icon: MicVocal, src: '/announcement'},  
     ];
     const nav = useNavigate()
+
+    function logout(){
+        window.localStorage.removeItem('user')
+        window.localStorage.removeItem('token')
+        nav('/login')
+    }
     return (
         <div>
             <div className="hidden sm:flex h-full" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
@@ -42,6 +49,11 @@ const Sidebar = () => {
                                 </span>
                             </li>
                         ))}
+                        <li className={`flex rounded-md p-2 cursor-pointer 
+                            hover:bg-light-white text-black text-sm items-center gap-x-4 `}>
+                                <LogOut/>
+                                <Button className={`${!open && "hidden"} origin-left duration-200`} onClick={logout}>Logout</Button>
+                        </li>
                     </ul>
                 </div>
             </div>
