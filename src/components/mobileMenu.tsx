@@ -6,8 +6,9 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { Banknote, CreditCard, House, List, Settings, Wallet, MicVocal } from 'lucide-react';
+import { Banknote, CreditCard, House, List, Settings, Wallet, MicVocal, LogOut } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const Menus = [
     { title: "Dashboard", icon: House, src: '/' },
@@ -21,6 +22,11 @@ const Menus = [
 
 export default function MobileMenu(){
     const nav = useNavigate()
+    function logout(){
+        window.localStorage.removeItem('user')
+        window.localStorage.removeItem('token')
+        nav('/login')
+    }
     return(
         <div>
         <Sheet>
@@ -49,6 +55,11 @@ export default function MobileMenu(){
                         </span>
                     </li>
                 ))}
+                <li className={`flex rounded-md p-2 cursor-pointer 
+                            hover:bg-light-white text-black text-sm items-center gap-x-4 `}>
+                                <LogOut/>
+                                <Button className={`${!open && "hidden"} origin-left duration-200`} onClick={logout}>Logout</Button>
+                        </li>
             </ul>
                 </SheetDescription>
         </SheetContent>
