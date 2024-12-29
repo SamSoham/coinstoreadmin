@@ -1,12 +1,45 @@
 // import Chart1 from "@/components/Chart1"
-import TopCard from "@/components/TopCard"
+import { DashboardChart } from "@/components/DashboardChart";
+import {TopCard} from "@/components/TopCard"
+import axios from "axios"
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+  const [data, setData] = useState(null)
+  const getData = async()=>{
 
+    try {
+      const token = localStorage.getItem("token");
+      const {data} = await axios.get('https://coinstore-backend.onrender.com/api/admin/dashboard', {
+        headers:{
+          authorization: `Bearer ${token}`
+        }
+      })
+      // console.log(data);
+      
+      setData(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    getData()
+  },[])
 
   return (
     <div className="p-4 min-h-screen">
-      <TopCard />
+      {
+        data &&
+        <div className="flex gap-4 flex-col">
+          <TopCard data={data}/>
+          <div className="flex flex-col md:flex-row w-full gap-4">
+            <DashboardChart data={data!['userGraph']} yAxis="count" title="New Users"/>
+            <DashboardChart data={data!['purchaseGraph']} yAxis="totalAmount" title="Purchases"/>
+          </div>
+        </div>
+
+      }
       {/* <Chart1/> */}
       {/* <div className="w-[90vw] h-[60vh] overflow-auto">
         <Table className="w-full border border-gray-200 rounded-lg shadow ">
