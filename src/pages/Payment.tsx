@@ -57,7 +57,7 @@ export default function Payment() {
     return (
         <div className="p-4 min-h-screen">
             <Dialog open={open} onOpenChange={() => setOpen(false)}>
-                <DialogContent className="min-w-fit">
+                <DialogContent className="min-w-fit overflow-auto max-h-[70vh]">
                     <DialogHeader>
                         <DialogTitle>Logs</DialogTitle>
                         {/* <DialogDescription>
@@ -65,11 +65,11 @@ export default function Payment() {
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         Payment Log
-                        <pre className="bg-slate-400 p-2">
+                        <pre className="bg-slate-400 p-2 overflow-auto">
                             {logs && JSON.stringify(JSON.parse(logs!['paymentLog']), null, 2)}
                         </pre>
                         Provider Log
-                        <pre className="bg-slate-400 p-2">
+                        <pre className="bg-slate-400 p-2 overflow-auto">
                             {logs && JSON.stringify(JSON.parse(logs!['providerLog']), null, 2)}
                         </pre>
                         
