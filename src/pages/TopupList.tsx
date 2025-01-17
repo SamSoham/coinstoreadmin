@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/hooks/use-toast"
+import { Plus, Trash2 } from "lucide-react"
+import { SelectItem, Select, SelectContent, SelectGroup, SelectTrigger, SelectValue} from "@/components/ui/select"
 
 
 export default function TopupList() {
@@ -20,7 +22,7 @@ export default function TopupList() {
 
     async function getTopupList() {
         try {
-            await axios.get('https://coinstore-backend.onrender.com/api/topup/get-all-topup').then((res) => setData(res.data.topup))
+            await axios.get('https://coinstore-backend.onrender.com/api/topup/get-all-topup',{headers:{authorization: `Bearer ${localStorage.getItem('token')}`}}).then((res) => setData(res.data.topup))
 
         } catch (error) {
             console.log(error);
@@ -35,9 +37,9 @@ export default function TopupList() {
     return (
         <div className="w-full min-h-screen">
             <div>
-                <TopupDisplay name="MLBB" data={data.filter((x) => x['game'] == "Mobile Legends")} img="/mlbblarge.png"
+                <TopupDisplay name="Mobile Legends" data={data.filter((x) => x['game'] == "Mobile Legends")} img="/mlbblarge.png"
                     update={() => getTopupList()} />
-                <TopupDisplay name="PUBG" data={data.filter((x) => x['game'] == "PUBG Global")} img="/mlbblarge.png"
+                <TopupDisplay name="PUBG Global" data={data.filter((x) => x['game'] == "PUBG Global")} img="/mlbblarge.png"
                     update={() => getTopupList()} />
                 <TopupDisplay name="Supersus" data={data.filter((x) => x['game'] == "Supersus")} img="/mlbblarge.png"
                     update={() => getTopupList()} />
@@ -72,25 +74,30 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
     const [topup, setTopup] = useState('')
     const [active, setActive] = useState(false)
     const [id, setId] = useState('')
+    const [isNew, setIsNew] = useState(false)
 
     const { toast } = useToast()
 
-    function editInfo(inf: any) {
+    function editInfo(inf: any, newTopup: boolean) {
+        setIsNew(newTopup)
         setOpen(true)
         setDesc(inf['description'])
         setQuantity(inf['amount'])
         setCode(inf['gameCode'])
         setComm(inf['commission'])
-        setGame(inf['game'])
+        setGame(name)
         setTopup(inf['topupCode'])
         setProvider(inf['provider'])
-        setActive(inf['isActive'])
-        setId(inf['_id'])
-        console.log(inf)
+        if(!newTopup){
+            setActive(inf['isActive'])
+            setId(inf['_id'])
+        }
+        // console.log(inf)
     }
 
     function reset() {
         setOpen(false)
+        setIsNew(false)
         setDesc('')
         setQuantity('')
         setCode('')
@@ -106,7 +113,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
             await axios.post('https://coinstore-backend.onrender.com/api/topup/update-status-topup', {
                 topupId: id,
                 isActive: isActive
-            })
+            },{headers:{authorization: `Bearer ${localStorage.getItem('token')}`}})
             setActive(isActive)
             toast({ title: 'Active Mode changed successfully' })
             update()
@@ -115,9 +122,22 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
         }
     }
 
+    async function deleteTopup(id: string) {
+        try {
+            await axios.post('http://localhost:8000/api/topup/delete-topup', {
+                topupId: id
+            },{headers:{authorization: `Bearer ${localStorage.getItem('token')}`}})
+            toast({ title: 'Deleted topup successfully' })
+            update()
+        } catch (err) {
+            console.log(err)
+        }
+        setOpen(false)
+    }
+
     async function saveInfo() {
         try {
-            await axios.post('https://coinstore-backend.onrender.com/api/topup/update-topup', {
+            const {data} = await axios.post(isNew ? 'http://localhost:8000/api/topup/create-topup' : 'https://coinstore-backend.onrender.com/api/topup/update-topup', {
                 topupId: id,
                 amount:quantity,
                 commission:comm,
@@ -126,26 +146,55 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                 gameCode:code,      
                 provider:provider,
                 topupCode:topup
-            })
-            toast({ title: 'Information updated successfully' })
-            update()
+            },{headers:{authorization: `Bearer ${localStorage.getItem('token')}`}})
+            if(data.success){
+                toast({ title: data.message })
+                update()
+            }else{
+                toast({ title: data.message })
+            }
             setOpen(false)
         } catch (err) {
             console.log(err)
+            toast({ title: "Internal server error" })
         }
     }
-
+    const newInf = {
+        description: "",
+        amount: "",
+        gameCode: "",
+        provider: "",
+        topupCode: "",
+        commission: "",
+        game: ""
+    }
+    const allGamesCode = {
+        "Mobile Legends": ['mlbb', 'mlbb_exclusive', 'mlbb_exclusive_global', 'mlbb_global'],
+        "PUBG Global": ['pubgm'],
+        "Supersus": ['super_sus'],
+        "Clash of Clans": ['clashofclans'],
+        "Clash Royale": ['clashroyale'],
+        "Farlight": ['farlight84'],
+        "Honkai: Star Rail": [],
+        "Genshin Impact": ["genshin"],
+        "Brawl Stars": ['brawlstars'],
+        "Honor of Kings": ['hok']
+    }
     return (
-        <div className="p-4">
-            <p className="text-xl font-bold">{name}</p>
+        <div className="flex flex-col p-4 gap-4">
+            <div className="flex w-full justify-between items-center">
+                <p className="text-xl font-bold">{name}</p>
+                <Button variant="outline" size="icon" onClick={()=>{editInfo(newInf, true)}}><Plus/></Button>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2  max-h-[50vh] overflow-auto no-scrollbar">
                 {
                     data.map((inf: any, index: number) => (
-                        <div key={index} className={`flex flex-row gap-2 border border-black rounded ${inf.isActive ? "bg-slate-200 w-[250px] hover:bg-slate-100" : "bg-red-200 w-[250px] hover:bg-red-100"} transition-colors p-2 cursor-pointer`} onClick={() => editInfo(inf)}>
+                        <div key={index} className={`flex flex-row gap-2 border border-black rounded ${inf.isActive ? "bg-slate-200 w-[250px] hover:bg-slate-100" : "bg-red-200 w-[250px] hover:bg-red-100"} transition-colors p-2 cursor-pointer`} onClick={() => editInfo(inf, false)}>
                             <img src={img} height={'50px'} width={'50px'} />
                             <div className="flex flex-col">
                                 <p>{inf['description']}</p>
                                 <p>₹ {inf['amount']}</p>
+                                <p>{inf['gameCode']}</p>
                             </div>
                         </div>
                     ))
@@ -154,57 +203,96 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
             <Dialog open={open} onOpenChange={reset}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Edit Information</DialogTitle>
+                        <DialogTitle>{isNew ? "Add topup" : "Edit Topup"}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="username" className="text-right">
                                 Amount
                             </Label>
-                            <Input id="username" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="col-span-3" placeholder="2000" />
+                            <Input id="amount" value={quantity} onChange={(e) => setQuantity(e.target.value)} className="col-span-3" placeholder="2000" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="username" className="text-right">
                                 Commission
                             </Label>
-                            <Input id="username" value={comm} onChange={(e) => setComm(e.target.value)} className="col-span-3" placeholder="2000" />
+                            <Input id="commission" value={comm} onChange={(e) => setComm(e.target.value)} className="col-span-3" placeholder="2000" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Description
                             </Label>
-                            <Input id="name" value={desc} onChange={(e) => setDesc(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input id="description" value={desc} onChange={(e) => setDesc(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Game
                             </Label>
-                            <Input disabled id="name" value={game} onChange={(e) => setGame(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input disabled id="name" value={name} onChange={(e) => setGame(e.target.value)} className="col-span-3" placeholder="12" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Game Code
                             </Label>
-                            <Input disabled id="name" value={code} onChange={(e) => setCode(e.target.value)} className="col-span-3" placeholder="12" />
+                            {
+                                isNew ? 
+                                <Select onValueChange={(val) => setCode(val)}>
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue placeholder="select game code"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {
+                                                allGamesCode[name as keyof typeof allGamesCode].map((gamecode: string)=>{
+                                                    return <SelectItem key={gamecode} value={gamecode}>{gamecode}</SelectItem>
+                                                })
+                                            }
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                                :
+                                <Input disabled id="gamecode" value={code} onChange={(e) => setCode(e.target.value)} className="col-span-3" placeholder="12" />
+                            }
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Provider
                             </Label>
-                            <Input disabled id="name" value={provider} onChange={(e) => setProvider(e.target.value)} className="col-span-3" placeholder="12" />
+                            {
+                                isNew ?
+                                <Select onValueChange={(val)=>{setProvider(val)}}>
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue placeholder="select provider"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="elitedias">Elitedias</SelectItem>
+                                            <SelectItem value="smileone">Smileone</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                                :
+                                <Input disabled id="name" value={provider} onChange={(e) => setProvider(e.target.value)} className="col-span-3" placeholder="12" />
+                            }
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Topup Code
                             </Label>
-                            <Input disabled id="name" value={topup} onChange={(e) => setTopup(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input disabled={!isNew} id="topupcode" value={topup} onChange={(e) => setTopup(e.target.value)} className="col-span-3" placeholder="Topup Code provided by provider" />
                         </div>
                     </div>
                     <DialogFooter>
-                        <div className="flex items-center space-x-2">
-                            <Switch id="airplane-mode" checked={active} onCheckedChange={() => updateIsActive(id, !active)} />
-                            <Label htmlFor="airplane-mode">Active</Label>
-                        </div>
+                        {
+                            !isNew &&
+                            <>
+                                <Button variant="outline" size="icon" onClick={()=>{deleteTopup(id)}}><Trash2/></Button>
+                                <div className="flex items-center space-x-2">
+                                    <Switch id="airplane-mode" checked={active} onCheckedChange={() => updateIsActive(id, !active)} />
+                                    <Label htmlFor="airplane-mode">Active</Label>
+                                </div>
+                            </>
+                        }
                         <Button type="submit" onClick={saveInfo}>Save changes</Button>
                     </DialogFooter>
                 </DialogContent>
