@@ -124,7 +124,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
 
     async function deleteTopup(id: string) {
         try {
-            await axios.post('http://localhost:8000/api/topup/delete-topup', {
+            await axios.post('https://coinstore-backend.onrender.com/api/topup/delete-topup', {
                 topupId: id
             },{headers:{authorization: `Bearer ${localStorage.getItem('token')}`}})
             toast({ title: 'Deleted topup successfully' })
@@ -137,7 +137,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
 
     async function saveInfo() {
         try {
-            const {data} = await axios.post(isNew ? 'http://localhost:8000/api/topup/create-topup' : 'https://coinstore-backend.onrender.com/api/topup/update-topup', {
+            const {data} = await axios.post(isNew ? 'https://coinstore-backend.onrender.com/api/topup/create-topup' : 'https://coinstore-backend.onrender.com/api/topup/update-topup', {
                 topupId: id,
                 amount:quantity,
                 commission:comm,
