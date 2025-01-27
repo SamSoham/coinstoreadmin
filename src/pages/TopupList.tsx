@@ -201,7 +201,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                     ))
                 }
             </div>
-            <Dialog open={open} onOpenChange={reset}>
+            <Dialog open={open} onOpenChange={reset}> 
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>{isNew ? "Add topup" : "Edit Topup"}</DialogTitle>
