@@ -169,7 +169,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
         game: ""
     }
     const allGamesCode = {
-        "Mobile Legends": ['mlbb', 'mlbb_exclusive', 'mlbb_exclusive_global', 'mlbb_global'],
+        "Mobile Legends": ['mlbb', 'mlbb_exclusive', 'mlbb_exclusive_global', 'mlbb_global', 'mlbb_smileone'],
         "PUBG Global": ['pubgm'],
         "Supersus": ['super_sus'],
         "Clash of Clans": ['clashofclans'],
@@ -180,13 +180,14 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
         "Brawl Stars": ['brawlstars'],
         "Honor of Kings": ['hok']
     }
+    
     return (
         <div className="flex flex-col p-4 gap-4">
             <div className="flex w-full justify-between items-center">
                 <p className="text-xl font-bold">{name}</p>
                 <Button variant="outline" size="icon" onClick={()=>{editInfo(newInf, true)}}><Plus/></Button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2  max-h-[50vh] overflow-auto no-scrollbar">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 max-h-[50vh] overflow-auto no-scrollbar">
                 {
                     data.map((inf: any, index: number) => (
                         <div key={index} className={`flex flex-row gap-2 border border-black rounded ${inf.isActive ? "bg-slate-200 w-[250px] hover:bg-slate-100" : "bg-red-200 w-[250px] hover:bg-red-100"} transition-colors p-2 cursor-pointer`} onClick={() => editInfo(inf, false)}>
@@ -228,15 +229,29 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                             <Label htmlFor="name" className="text-right">
                                 Game
                             </Label>
-                            <Input disabled id="name" value={name} onChange={(e) => setGame(e.target.value)} className="col-span-3" placeholder="12" />
+                            <Input id="name" value={name} onChange={(e) => setGame(e.target.value)} className="col-span-3" placeholder="12" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="name" className="text-right">
+                                Provider
+                            </Label>
+                                <Select defaultValue={provider} onValueChange={(val)=>{setProvider(val)}}>
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue placeholder="select provider"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="elitedias">Elitedias</SelectItem>
+                                            <SelectItem value="smileone">Smileone</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Game Code
                             </Label>
-                            {
-                                isNew ? 
-                                <Select onValueChange={(val) => setCode(val)}>
+                                <Select defaultValue={code} onValueChange={(val) => setCode(val)}>
                                     <SelectTrigger className="col-span-3">
                                         <SelectValue placeholder="select game code"/>
                                     </SelectTrigger>
@@ -250,36 +265,13 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
-                                :
-                                <Input disabled id="gamecode" value={code} onChange={(e) => setCode(e.target.value)} className="col-span-3" placeholder="12" />
-                            }
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="name" className="text-right">
-                                Provider
-                            </Label>
-                            {
-                                isNew ?
-                                <Select onValueChange={(val)=>{setProvider(val)}}>
-                                    <SelectTrigger className="col-span-3">
-                                        <SelectValue placeholder="select provider"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="elitedias">Elitedias</SelectItem>
-                                            <SelectItem value="smileone">Smileone</SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                                :
-                                <Input disabled id="name" value={provider} onChange={(e) => setProvider(e.target.value)} className="col-span-3" placeholder="12" />
-                            }
-                        </div>
+                        
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
                                 Topup Code
                             </Label>
-                            <Input disabled={!isNew} id="topupcode" value={topup} onChange={(e) => setTopup(e.target.value)} className="col-span-3" placeholder="Topup Code provided by provider" />
+                            <Input id="topupcode" value={topup} onChange={(e) => setTopup(e.target.value)} className="col-span-3" placeholder="Topup Code provided by provider" />
                         </div>
                     </div>
                     <DialogFooter>
