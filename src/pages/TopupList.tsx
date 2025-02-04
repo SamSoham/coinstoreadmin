@@ -169,7 +169,7 @@ const TopupDisplay = ({ name, data, img, update }: { name: string, data: any, im
         game: ""
     }
     const allGamesCode = {
-        "Mobile Legends": ['mlbb', 'mlbb_exclusive', 'mlbb_exclusive_global', 'mlbb_global', 'mlbb_smileone'],
+        "Mobile Legends": ['mlbb', 'mlbb_exclusive', 'mlbb_exclusive_global', 'mlbb_global', "mlbb_special", 'mlbb_smileone'],
         "PUBG Global": ['pubgm'],
         "Supersus": ['super_sus'],
         "Clash of Clans": ['clashofclans'],
